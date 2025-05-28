@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Malicious Threat Detector</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .navbar {
+            width: 100%;
+            background: #161b22;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin: 0;
+            color: #58a6ff;
+            letter-spacing: 2px;
+        }
+
+        .container {
+            margin: 40px auto;
+            width: 90%;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            padding: 30px 25px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #58a6ff;
+            border-bottom: 2px solid #58a6ff;
+            padding-bottom: 8px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-size: 1rem;
+            color: #c9d1d9;
+            font-weight: 600;
+        }
+
+        input[type="file"],
+        input[type="text"] {
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            background-color: #0d1117;
+            color: #ffffff;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="file"] {
+            cursor: pointer;
+        }
+
+        input[type="text"]:focus,
+        input[type="file"]:focus {
+            border-color: #60a5fa;
+        }
+
+        button {
+            max-width: 320px;
+            width: 100%;
+            padding: 14px 20px;
+            background-color: #22c55e;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            align-self: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #16a34a;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        .message-box {
+            white-space: pre-wrap;
+            background: #161b22;
+            color: #c9d1d9;
+            padding: 20px;
+            border-radius: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            margin-bottom: 30px;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>MaliciousDetection</h1>
+    </div>
+
+    <div class="container">
+
+        <!-- Scam File Upload -->
+        <section>
+            <h2>Analyze Scam Files</h2>
+            <form action="/scam/" method="post" enctype="multipart/form-data">
+                <label for="file">Upload a file (PDF or TXT only):</label>
+                <input type="file" id="file" name="file" accept=".pdf,.txt" required />
+                <button type="submit">Analyze File</button>
+            </form>
+            {% if message %}
+            <div class="message-box">
+                <strong>Status:</strong><br />
+                {{ message }}
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Scam URL Detection -->
+        <section>
+            <h2>Analyze Scam URL</h2>
+            <form action="/predict" method="post">
+                <label for="url">Enter URL to Analyze:</label>
+                <input type="text" id="url" name="url" placeholder="https://example.com" required />
+                <button type="submit">Analyze URL</button>
+            </form>
+            {% if input_url %}
+            <div class="message-box">
+                <strong>URL:</strong> {{ input_url }}<br />
+                <strong>Classification:</strong><br />
+                {{ predicted_class }}
+            </div>
+            {% endif %}
+        </section>
+
+    </div>
+</body>
+</html>
